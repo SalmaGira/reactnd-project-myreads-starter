@@ -74,7 +74,6 @@ class Search extends React.Component {
             {booksFromSearch &&
               booksFromSearch.map((book) => (
                 <li key={book.id}>
-                  {book.shelf && JSON.stringify(book.shelf)}
                   <BookCard
                     key={book.id}
                     bookId={book.id}
