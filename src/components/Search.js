@@ -24,12 +24,6 @@ class Search extends React.Component {
     if (!booksFromSearch || booksFromSearch.error) {
       this.setState({ booksFromSearch: null });
     } else if (Array.isArray(booksFromSearch)) {
-      for (let book in booksFromSearch) {
-        const shelfBook = await BooksAPI.get(booksFromSearch[book].id);
-        const shelf = shelfBook.shelf;
-        booksFromSearch[book].shelf = shelf;
-      }
-
       this.setState({ booksFromSearch: booksFromSearch });
     }
   }
@@ -64,11 +58,8 @@ class Search extends React.Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {booksFromSearch &&
-              booksFromSearch.map((book) => (
+              booksFromSearch.map((book, index) => (
                 <li key={book.id}>
-                  {/* {console.log(`** ${book.title} ** with id: ${book.id}`)} */}
-                  {/* {console.log(BooksAPI.get(book.id))} */}
-                  {/* {console.log(this.getShelf(book.id))} */}
                   <BookCard
                     key={book.id}
                     bookId={book.id}

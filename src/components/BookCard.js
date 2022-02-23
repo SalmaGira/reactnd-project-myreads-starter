@@ -8,6 +8,8 @@ class BookCard extends React.Component {
     super(props);
     this.state = props;
 
+    if (this.state.activeShelf === "none") this.getShelf();
+
     this.handleChange = this.handleChange.bind(this);
   }
   async handleChange(event) {
@@ -16,6 +18,14 @@ class BookCard extends React.Component {
     this.setState({ activeShelf: newShelf });
 
     // this.props.action();
+  }
+
+  async getShelf() {
+    const bookId = this.state.bookId;
+    const shelfBook = await BooksAPI.get(bookId);
+    const shelf = shelfBook.shelf;
+    this.setState({ activeShelf: shelf });
+    return shelf;
   }
 
   render() {
