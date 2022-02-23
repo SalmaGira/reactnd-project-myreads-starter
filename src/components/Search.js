@@ -11,36 +11,28 @@ class Search extends React.Component {
     booksFromShelves: null,
   };
 
-  async componentDidUpdate(query) {
-    let booksFromShelves = await BooksAPI.getAll().then();
-    this.setState({ booksFromShelves: booksFromShelves });
-
-    let booksFromSearch = await BooksAPI.search(query);
-
-    booksFromSearch.filter((bookFromSearch, indexSearch) => {
-      booksFromShelves.filter((bookFromShelves, indexShelf) => {
-        if (bookFromSearch.id === bookFromShelves.id) {
-          booksFromSearch[indexSearch].shelf =
-            booksFromShelves[indexShelf].shelf;
-          return;
-        }
-      });
-    });
-
-    if (!booksFromSearch || booksFromSearch.error) {
-      this.setState({ booksFromSearch: null });
-    } else if (Array.isArray(booksFromSearch)) {
-      this.setState({ booksFromSearch: booksFromSearch });
-    }
-  }
-
-  updateQuery = (query) => {
+  async updateQuery(query) {
     this.setState(() => ({
       query: query.trim(),
     }));
 
-    this.componentDidUpdate(query.trim());
-  };
+    let booksFromShelves = await BooksAPI.getAll();
+    this.setState({ booksFromShelves: booksFromShelves });
+
+    let booksFromSearch = await BooksAPI.search(query);
+
+    if (!booksFromSearch || booksFromSearch.error) {
+      this.setState({ booksFromSearch: null });
+    } else if (Array.isArray(booksFromSearch)) {
+      for (let book in booksFromSearch) {
+        const shelfBook = await BooksAPI.get(booksFromSearch[book].id);
+        const shelf = shelfBook.shelf;
+        booksFromSearch[book].shelf = shelf;
+      }
+
+      this.setState({ booksFromSearch: booksFromSearch });
+    }
+  }
 
   async handler() {}
 
@@ -74,6 +66,9 @@ class Search extends React.Component {
             {booksFromSearch &&
               booksFromSearch.map((book) => (
                 <li key={book.id}>
+                  {/* {console.log(`** ${book.title} ** with id: ${book.id}`)} */}
+                  {/* {console.log(BooksAPI.get(book.id))} */}
+                  {/* {console.log(this.getShelf(book.id))} */}
                   <BookCard
                     key={book.id}
                     bookId={book.id}
