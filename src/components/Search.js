@@ -13,7 +13,7 @@ class Search extends React.Component {
 
   async updateQuery(query) {
     this.setState(() => ({
-      query: query.trim(),
+      query: query,
     }));
 
     let booksFromShelves = await BooksAPI.getAll();

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
 import BookCard from "./components/BookCard";
@@ -24,16 +24,14 @@ class BooksApp extends React.Component {
 
   render() {
     return (
-      <Router>
-        <div className="app">
-          <Switch>
-            <Route exact path="/">
-              <Dashboard />
-            </Route>
-            <Route path="/search" component={Search} />
-          </Switch>
-        </div>
-      </Router>
+      // <Router>
+      <div className="app">
+        {/* <Switch> */}
+        <Route exact path="/" component={Dashboard} />
+        <Route path="/search" component={Search} />
+        {/* </Switch> */}
+      </div>
+      // </Router>
     );
   }
 }
